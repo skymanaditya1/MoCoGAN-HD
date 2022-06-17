@@ -45,9 +45,13 @@ def model_to_gpu(model, opt):
 def create_model(opt):
     ckpt = load_checkpoints(opt.img_g_weights, opt.gpu)
 
+    # changing the n_mlp and channel_multiplier for handling dimension <= 256
+    n_mlp = 2
+    channel_multiplier = 1
+
     modelG = model.Generator(size=opt.style_gan_size,
                              style_dim=opt.latent_dimension,
-                             n_mlp=opt.n_mlp)
+                             n_mlp=n_mlp, channel_multiplier=channel_multiplier)
     modelG.load_state_dict(ckpt['g_ema'], strict=False)
     modelG.eval()
 
